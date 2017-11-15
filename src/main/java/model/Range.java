@@ -41,4 +41,22 @@ public class Range {
         return "("  + min + (max != null ? (", " + max) : "") + ')';
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Range range = (Range) o;
+
+        if (!min.equals(range.min)) return false;
+        return max != null ? max.equals(range.max) : range.max == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = min.hashCode();
+        result = 31 * result + (max != null ? max.hashCode() : 0);
+        return result;
+    }
 }
