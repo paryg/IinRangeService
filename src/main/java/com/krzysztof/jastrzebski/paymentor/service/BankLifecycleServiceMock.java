@@ -1,4 +1,4 @@
-package service;
+package com.krzysztof.jastrzebski.paymentor.service;
 
 import org.springframework.stereotype.Service;
 

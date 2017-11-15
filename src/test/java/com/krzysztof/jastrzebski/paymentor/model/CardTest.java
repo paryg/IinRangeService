@@ -1,4 +1,4 @@
-package model;
+package com.krzysztof.jastrzebski.paymentor.model;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;

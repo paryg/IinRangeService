@@ -1,4 +1,4 @@
-package model;
+package com.krzysztof.jastrzebski.paymentor.model;
 
 import org.apache.commons.lang3.Validate;
 
@@ -17,7 +17,7 @@ public class Bank {
 
     private List<Range> process(String range) {
         String[] ranges = range.split("\\s*,\\s*");
-        Validate.notEmpty(ranges, String.format("No valid range provided for input '{}'!", range));
+        Validate.notEmpty(ranges, String.format("No valid range provided for input '%s'!", range));
         return Arrays.stream(ranges)
                 .map(this::convertToRange)
                 .collect(Collectors.toList());

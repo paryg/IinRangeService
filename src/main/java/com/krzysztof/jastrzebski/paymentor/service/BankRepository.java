@@ -1,6 +1,7 @@
-package service;
+package com.krzysztof.jastrzebski.paymentor.service;
 
-import model.Bank;
+import com.krzysztof.jastrzebski.paymentor.model.Bank;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 @Repository
 public class BankRepository {
     private Set<Bank> bankSet = new HashSet<>();
+    @Resource(name = "myProperties")
     private Properties myProperties;
 
     private final static String NAME_POSTFIX = ".name";
@@ -27,9 +29,9 @@ public class BankRepository {
                 banks) {
             String bankName = myProperties.getProperty(String.format("%s%s", bankProperty, NAME_POSTFIX));
             String bankRange = myProperties.getProperty(String.format("%s%s", bankProperty, RANGE_POSTFIX));
-            //if (!StringUtils.isEmpty(bankName) && !StringUtils.isEmpty(bankRange)) {
+            if (!StringUtils.isEmpty(bankName) && !StringUtils.isEmpty(bankRange)) {
                 bankSet.add(new Bank(bankName, bankRange));
-            //}
+            }
         }
     }
 
@@ -37,8 +39,7 @@ public class BankRepository {
         return bankSet;
     }
 
-    @Resource(name = "myProperties")
-    public void setMyProperties(Properties myProperties) {
+    protected void setMyProperties(Properties myProperties) {
         this.myProperties = myProperties;
     }
 }

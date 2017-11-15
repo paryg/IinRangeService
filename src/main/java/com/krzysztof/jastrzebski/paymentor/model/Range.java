@@ -1,4 +1,4 @@
-package model;
+package com.krzysztof.jastrzebski.paymentor.model;
 
 public class Range {
     private String min;
