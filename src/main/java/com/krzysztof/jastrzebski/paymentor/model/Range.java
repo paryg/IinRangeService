@@ -38,7 +38,7 @@ public class Range {
 
     @Override
     public String toString() {
-        return "("  + min + (max != null ? (", " + max) : "") + ')';
+        return max != null ? "("  + min + ", " + max + ")" : min;
     }
 
 

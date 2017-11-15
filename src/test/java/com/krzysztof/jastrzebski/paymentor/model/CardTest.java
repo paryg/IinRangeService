@@ -24,8 +24,12 @@ public class CardTest {
 
     @Test
     @Parameters(method = "wideRangeParameters")
-    public void getCardNumber(String inputCardNumber, String result) throws Exception {
+    public void shouldMatchGivenResultWithCreatedCardNumber(String inputCardNumber, String result) {
         assertEquals(result, new Card(inputCardNumber).getCardNumber());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentExceptionWhenCreatingCardWithNullNumber() {
+        new Card(null);
+    }
 }

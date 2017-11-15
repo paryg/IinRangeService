@@ -36,7 +36,7 @@ public class RangeTest {
 
     @Test
     @Parameters(method = "wideRangeParameters")
-    public void testContainsForWideRange(String cardNumber, String rangeMin, String rangeMax, boolean isContained) throws Exception {
+    public void shouldWideRangeContainGivenCardNumber(String cardNumber, String rangeMin, String rangeMax, boolean isContained) throws Exception {
         Range range = new Range(new String[]{rangeMin, rangeMax});
 
         Boolean result = range.contains(cardNumber);
@@ -56,7 +56,7 @@ public class RangeTest {
 
     @Test
     @Parameters(method = "narrowRangeParameters")
-    public void testContainsForNarrowRange(String cardNumber, String rangeMin, boolean isContained) throws Exception {
+    public void shouldNarrowRangeContainGivenCardNumber(String cardNumber, String rangeMin, boolean isContained) throws Exception {
         Range range = new Range(new String[]{rangeMin});
 
         Boolean result = range.contains(cardNumber);

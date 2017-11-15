@@ -1,6 +1,6 @@
 package com.krzysztof.jastrzebski.paymentor.model;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Response {
@@ -16,7 +16,7 @@ public class Response {
 
     public Response(String cardNumber, ResponseType type) {
         this.cardNumber = cardNumber;
-        eligibleBanks = Collections.EMPTY_LIST;
+        eligibleBanks = new ArrayList<>();
         this.type = type;
     }
 
@@ -30,5 +30,14 @@ public class Response {
 
     public ResponseType getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "cardNumber='" + cardNumber + '\'' +
+                ", eligibleBanks=" + eligibleBanks +
+                ", type=" + type +
+                '}';
     }
 }

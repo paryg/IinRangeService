@@ -3,24 +3,24 @@ package com.krzysztof.jastrzebski.paymentor.model;
 import org.apache.commons.lang3.Validate;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Bank {
     private String name;
-    private List<Range> rangeList;
+    private Set<Range> rangeList;
 
     public Bank(String name, String range) {
         this.name = name;
         rangeList = process(range);
     }
 
-    private List<Range> process(String range) {
+    private Set<Range> process(String range) {
         String[] ranges = range.split("\\s*,\\s*");
         Validate.notEmpty(ranges, String.format("No valid range provided for input '%s'!", range));
         return Arrays.stream(ranges)
                 .map(this::convertToRange)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private Range convertToRange(String rawRange) {

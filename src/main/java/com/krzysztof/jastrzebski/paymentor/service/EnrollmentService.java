@@ -4,6 +4,7 @@ import com.krzysztof.jastrzebski.paymentor.model.Bank;
 import com.krzysztof.jastrzebski.paymentor.model.Card;
 import com.krzysztof.jastrzebski.paymentor.model.Response;
 import com.krzysztof.jastrzebski.paymentor.model.ResponseType;
+import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class EnrollmentService {
 
-    private static Logger log = Logger.getLogger(EnrollmentService.class.getName());
+    private static Logger log = Logger.getLogger(EnrollmentService.class);
 
     @Autowired
     private BankLifecycleService bankLifecycleService;
@@ -23,6 +24,7 @@ public class EnrollmentService {
     private BankRepository bankRepository;
 
     public Response enrollCard(Card card) {
+        Validate.isTrue(card != null, "Cannot process null card!");
         List<Bank> supportedBanks;
         try {
             supportedBanks = getSupportedBanks(getAllCorrespondingBanks(card));
@@ -40,6 +42,15 @@ public class EnrollmentService {
         return new Response(card.getCardNumber(), ResponseType.APPROVE, supportedBanks);
     }
 
+    public List<Response> enrollCards(List<Card> cards) {
+        List<Response> responses = new ArrayList<>();
+        for (Card card :
+                cards) {
+            responses.add(enrollCard(card));
+        }
+        return responses;
+    }
+
     private List<Bank> getAllCorrespondingBanks(Card card) {
         return bankRepository.getBankSet().stream()
                 .filter(bank -> bank.inRange(card))
@@ -48,14 +59,10 @@ public class EnrollmentService {
 
     private List<Bank> getSupportedBanks(List<Bank> correspondingBanks) throws TechnicalException {
         List<Bank> supportedBanks = new ArrayList<>();
-        try {
-            for (Bank correspondingBank : correspondingBanks) {
-                if(isBankSupported(correspondingBank.getName())) {
-                    supportedBanks.add(correspondingBank);
-                }
+        for (Bank correspondingBank : correspondingBanks) {
+            if(isBankSupported(correspondingBank.getName())) {
+                supportedBanks.add(correspondingBank);
             }
-        } catch (TechnicalException e) {
-            throw e;
         }
         return supportedBanks;
     }
@@ -63,8 +70,6 @@ public class EnrollmentService {
     private Boolean isBankSupported(String bankName) throws TechnicalException {
         try {
             return !bankLifecycleService.isBankSuspended(bankName);
-        } catch (TechnicalException e) {
-            throw e;
         } catch (NoSuchBankException e) {
             log.info(String.format("Bank %s is not supported by BankLifecycleService! Returning false.", bankName), e);
             return false;

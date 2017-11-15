@@ -17,8 +17,9 @@ public class BankRepository {
     @Resource(name = "myProperties")
     private Properties myProperties;
 
-    private final static String NAME_POSTFIX = ".name";
-    private final static String RANGE_POSTFIX = ".range";
+    private final static String NAME_POSTFIX = "name";
+    private final static String RANGE_POSTFIX = "range";
+    private final static String PROPERTY_TEMPLATE = "%s.%s";
 
     @PostConstruct
     public void loadBankSet() {
@@ -27,8 +28,8 @@ public class BankRepository {
                 .collect(Collectors.toSet());
         for (String bankProperty :
                 banks) {
-            String bankName = myProperties.getProperty(String.format("%s%s", bankProperty, NAME_POSTFIX));
-            String bankRange = myProperties.getProperty(String.format("%s%s", bankProperty, RANGE_POSTFIX));
+            String bankName = myProperties.getProperty(String.format(PROPERTY_TEMPLATE, bankProperty, NAME_POSTFIX));
+            String bankRange = myProperties.getProperty(String.format(PROPERTY_TEMPLATE, bankProperty, RANGE_POSTFIX));
             if (!StringUtils.isEmpty(bankName) && !StringUtils.isEmpty(bankRange)) {
                 bankSet.add(new Bank(bankName, bankRange));
             }
