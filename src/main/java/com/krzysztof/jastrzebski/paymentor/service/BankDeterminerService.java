@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class EnrollmentService {
+public class BankDeterminerService {
 
-    private static Logger log = Logger.getLogger(EnrollmentService.class);
+    private static Logger log = Logger.getLogger(BankDeterminerService.class);
 
     @Autowired
     private BankLifecycleService bankLifecycleService;
     @Autowired
     private BankRepository bankRepository;
 
-    public Response enrollCard(Card card) {
+    public Response determineEligibleBank(Card card) {
         Validate.isTrue(card != null, "Cannot process null card!");
         List<Bank> supportedBanks;
         try {
@@ -42,11 +42,10 @@ public class EnrollmentService {
         return new Response(card.getCardNumber(), ResponseType.APPROVE, supportedBanks);
     }
 
-    public List<Response> enrollCards(List<Card> cards) {
+    public List<Response> determineEligibleBankForCardList(List<Card> cards) {
         List<Response> responses = new ArrayList<>();
-        for (Card card :
-                cards) {
-            responses.add(enrollCard(card));
+        for (Card card : cards) {
+            responses.add(determineEligibleBank(card));
         }
         return responses;
     }

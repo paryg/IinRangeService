@@ -20,9 +20,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(JUnitParamsRunner.class)
-public class EnrollmentServiceTest {
+public class BankDeterminerServiceTest {
 
-    private EnrollmentService enrollmentService;
+    private BankDeterminerService bankDeterminerService;
 
     private static final String CARD_NUMBER_10000 = "10000";
     private static final String CARD_NUMBER_20000 = "20000";
@@ -41,22 +41,22 @@ public class EnrollmentServiceTest {
     @Before
     public void setUp() {
         initMocks(this);
-        enrollmentService = new EnrollmentService();
-        enrollmentService.setBankRepository(bankRepository);
-        enrollmentService.setBankLifecycleService(bankLifecycleService);
+        bankDeterminerService = new BankDeterminerService();
+        bankDeterminerService.setBankRepository(bankRepository);
+        bankDeterminerService.setBankLifecycleService(bankLifecycleService);
         doReturn(getBanksData()).when(bankRepository).getBankSet();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentExceptionWhenEnrollingNullCard() {
-        enrollmentService.enrollCard(null);
+        bankDeterminerService.determineEligibleBank(null);
     }
 
     @Test
     public void shouldReturnRejectResponseWhenEnrollingEmptyCard() {
         Card emptyCard = new Card("");
 
-        Response result = enrollmentService.enrollCard(emptyCard);
+        Response result = bankDeterminerService.determineEligibleBank(emptyCard);
 
         assertEquals(ResponseType.REJECT, result.getType());
     }
@@ -79,7 +79,7 @@ public class EnrollmentServiceTest {
         doReturn(isBank1Suspended).when(bankLifecycleService).isBankSuspended(BANK1_NAME);
         doReturn(isBank2Suspended).when(bankLifecycleService).isBankSuspended(BANK2_NAME);
 
-        Response result = enrollmentService.enrollCard(inputCard);
+        Response result = bankDeterminerService.determineEligibleBank(inputCard);
 
         assertEquals(responseType, result.getType());
         assertEquals(correspondingBankSize, result.getEligibleBanks().size());
@@ -98,7 +98,7 @@ public class EnrollmentServiceTest {
         Card inputCard = new Card(cardNumber);
         doThrow(thrownException).when(bankLifecycleService).isBankSuspended(BANK1_NAME);
 
-        Response result = enrollmentService.enrollCard(inputCard);
+        Response result = bankDeterminerService.determineEligibleBank(inputCard);
 
         assertEquals(responseType, result.getType());
     }
@@ -120,7 +120,7 @@ public class EnrollmentServiceTest {
         doReturn(false).when(bankLifecycleService).isBankSuspended(BANK1_NAME);
         doReturn(false).when(bankLifecycleService).isBankSuspended(BANK2_NAME);
 
-        List<Response> result = enrollmentService.enrollCards(inputList);
+        List<Response> result = bankDeterminerService.determineEligibleBankForCardList(inputList);
 
         assertEquals(responses.size(), result.size());
         for (int i = 0; i < responses.size(); i++) {

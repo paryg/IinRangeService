@@ -27,7 +27,7 @@ public class BankRepositoryTest {
 
         properties.load(is);
         bankRepository = new BankRepository();
-        bankRepository.setMyProperties(properties);
+        bankRepository.setBankProperties(properties);
         bankRepository.loadBankSet();
     }
 

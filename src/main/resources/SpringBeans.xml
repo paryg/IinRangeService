@@ -8,8 +8,7 @@
 
     <context:component-scan base-package="com.krzysztof.jastrzebski.paymentor.service" />
 
-    <bean id="myProperties"
-          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <bean id="bankProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
             <list>
                 <value>classpath*:bank.properties</value>

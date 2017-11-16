@@ -63,4 +63,9 @@ public class RangeTest {
 
         assertEquals(isContained, result);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenIncorrectRangePassedToConstructor() {
+        new Range(new String[]{RANGE_10, RANGE_150, RANGE_200});
+    }
 }

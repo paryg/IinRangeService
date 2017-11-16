@@ -3,10 +3,13 @@ package com.krzysztof.jastrzebski.paymentor.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used to store crucial data regarding association of a cardNumber with its corresponding bank(s).
+ */
 public class Response {
     private String cardNumber;
-    private List<Bank> eligibleBanks;
     private ResponseType type;
+    private List<Bank> eligibleBanks;
 
     public Response(String cardNumber, ResponseType type, List<Bank> eligibleBanks) {
         this.cardNumber = cardNumber;
@@ -36,8 +39,8 @@ public class Response {
     public String toString() {
         return "Response{" +
                 "cardNumber='" + cardNumber + '\'' +
-                ", eligibleBanks=" + eligibleBanks +
                 ", type=" + type +
+                ", eligibleBanks=" + eligibleBanks +
                 '}';
     }
 }

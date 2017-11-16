@@ -2,6 +2,13 @@ package com.krzysztof.jastrzebski.paymentor.model;
 
 import org.apache.commons.lang3.Validate;
 
+/**
+ * Representation of a card with minimal validation.
+ * Either PAN or IIN can be passed as a constructor parameter.
+ *
+ * No reason to split representation of PAN or IIN into separate fields
+ * as only the shortest part of the PAN/IIN is used to determine the corresponding bank.
+ */
 public class Card {
     private final String cardNumber;
 

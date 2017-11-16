@@ -3,7 +3,7 @@ package com.krzysztof.jastrzebski.paymentor;
 import com.krzysztof.jastrzebski.paymentor.model.Card;
 import com.krzysztof.jastrzebski.paymentor.model.Response;
 import com.krzysztof.jastrzebski.paymentor.service.BankRepository;
-import com.krzysztof.jastrzebski.paymentor.service.EnrollmentService;
+import com.krzysztof.jastrzebski.paymentor.service.BankDeterminerService;
 import com.krzysztof.jastrzebski.paymentor.service.NoSuchBankException;
 import com.krzysztof.jastrzebski.paymentor.service.TechnicalException;
 import org.springframework.context.ApplicationContext;
@@ -22,7 +22,7 @@ public class Application {
     public static void main(String[] args) throws TechnicalException, NoSuchBankException {
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"SpringBeans.xml"});
         BankRepository bankRepository = context.getBean(BankRepository.class);
-        EnrollmentService enrollmentService = context.getBean(EnrollmentService.class);
+        BankDeterminerService bankDeterminerService = context.getBean(BankDeterminerService.class);
         System.out.println("---------------");
         System.out.println("Available banks: " + bankRepository.getBankSet());
         System.out.println("---------------");
@@ -30,40 +30,40 @@ public class Application {
             System.out.println("Provide either a single card number or a list of card numbers, otherwise you'll see this demo:");
             System.out.println("---------------");
 
-            System.out.println("Running enrollment for RolBank card...");
+            System.out.println("Determining eligible banks for RolBank card...");
             Card rolBankCard = new Card(ROLBANK_CARD);
-            Response rolBankResult = enrollmentService.enrollCard(rolBankCard);
-            System.out.println("Card " + rolBankCard + " enrolled with the following result: " + rolBankResult.getType() + " for bank " + rolBankResult.getEligibleBanks());
+            Response rolBankResult = bankDeterminerService.determineEligibleBank(rolBankCard);
+            System.out.println("Card " + rolBankCard + " was processed with the following result: " + rolBankResult.getType() + " for bank " + rolBankResult.getEligibleBanks());
             System.out.println("---------------");
 
-            System.out.println("Running enrollment for an ambiguous card...");
+            System.out.println("Determining eligible banks for an ambiguous card...");
             Card ambiguousCard = new Card(AMBIGUOUS_CARD);
-            Response ambiguousResult = enrollmentService.enrollCard(ambiguousCard);
-            System.out.println("Card " + ambiguousCard + " enrolled with the following result: " + ambiguousResult.getType()+ " for bank " + ambiguousResult.getEligibleBanks());
+            Response ambiguousResult = bankDeterminerService.determineEligibleBank(ambiguousCard);
+            System.out.println("Card " + ambiguousCard + " was processed with the following result: " + ambiguousResult.getType()+ " for bank " + ambiguousResult.getEligibleBanks());
             System.out.println("---------------");
 
-            System.out.println("Running enrollment for an unsupported card...");
+            System.out.println("Determining eligible banks for an unsupported card...");
             Card unsupportedCard = new Card(UNSUPPORTED_CARD);
-            Response unsupportedResult = enrollmentService.enrollCard(unsupportedCard);
-            System.out.println("Card " + unsupportedCard + " enrolled with the following result: " + unsupportedResult.getType());
+            Response unsupportedResult = bankDeterminerService.determineEligibleBank(unsupportedCard);
+            System.out.println("Card " + unsupportedCard + " was processed with the following result: " + unsupportedResult.getType());
             System.out.println("---------------");
 
-            System.out.println("Running enrollment for all three Cards as a List...");
+            System.out.println("Determining eligible banks for all three Cards as a List...");
             List<Card> cardList = Arrays.asList(rolBankCard, ambiguousCard, unsupportedCard);
-            List<Response> resultList = enrollmentService.enrollCards(cardList);
-            System.out.println("Cards " + cardList + " enrolled with the following result: " + resultList);
+            List<Response> resultList = bankDeterminerService.determineEligibleBankForCardList(cardList);
+            System.out.println("Cards " + cardList + " were processed with the following result: " + resultList);
             System.out.println("---------------");
         } else if (args.length == 1) {
-            System.out.println("Running enrollment for a single card...");
+            System.out.println("Determining eligible banks for a single card...");
             Card singleCard = new Card(args[0]);
-            Response rolBankResult = enrollmentService.enrollCard(singleCard);
-            System.out.println("Card " + singleCard + " enrolled with the following result: " + rolBankResult.getType() + (!rolBankResult.getEligibleBanks().isEmpty() ? " for bank " + rolBankResult.getEligibleBanks() : ""));
+            Response rolBankResult = bankDeterminerService.determineEligibleBank(singleCard);
+            System.out.println("Card " + singleCard + " was processed with the following result: " + rolBankResult.getType() + (!rolBankResult.getEligibleBanks().isEmpty() ? " for bank " + rolBankResult.getEligibleBanks() : ""));
             System.out.println("---------------");
         } else {
-            System.out.println("Running enrollment for a list of cards...");
+            System.out.println("Determining eligible banks for a list of cards...");
             List<Card> cardList = Arrays.stream(args).map(Card::new).collect(Collectors.toList());
-            List<Response> resultList = enrollmentService.enrollCards(cardList);
-            System.out.println("Cards " + cardList + " enrolled with the following result: " + resultList);
+            List<Response> resultList = bankDeterminerService.determineEligibleBankForCardList(cardList);
+            System.out.println("Cards " + cardList + " were processed with the following result: " + resultList);
             System.out.println("---------------");
         }
     }

@@ -11,7 +11,7 @@ public class Range {
             min = ranges[0];
             max = ranges[1];
         } else {
-
+            throw new IllegalArgumentException(String.format("Incorrect range: %s", ranges));
         }
     }
 
