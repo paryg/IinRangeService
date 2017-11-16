@@ -1,6 +1,6 @@
 # IIN Range Project
 
-One Paragraph of project description goes here
+This is a very detailed description regarding IinRangeService project.
 
 ## Building
 
@@ -31,7 +31,7 @@ java -jar IinRangeService-1.0-SNAPSHOT-jar-with-dependencies.jar 53999999
 
 ### List of parameters
 
-Run with a list of parameters to see whether each card is supported:
+Run with a list of parameters to see whether each card in the list is supported:
 
 ```
 java -jar IinRangeService-1.0-SNAPSHOT-jar-with-dependencies.jar 53999999 535810000 10000000
